@@ -1,7 +1,7 @@
 """
-models.py
+blocks.py
 
-This module defines the architecture of the models.
+This module defines the architecture of the blocks.
 It includes a placeholder model named PoolConv that applies an optional max-pooling operation followed by a convolution.
 The PoolConv module takes the following arguments:
   - c_in: Number of input channels.

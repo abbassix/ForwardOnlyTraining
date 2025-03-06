@@ -28,7 +28,7 @@ from omegaconf import OmegaConf
 # Import data and model functions
 from data import load_and_split_data, Config as DataConfig
 from data_gen import generate_data
-from models import PoolConv
+from blocks import PoolConv
 
 # ------------------------------------------------------------------------------
 # Logging Configuration

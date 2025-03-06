@@ -1,7 +1,7 @@
-# Models Module Documentation
+# Blocks Module Documentation
 
 ## Overview
-This module (`models.py`) defines the architecture of the models you can use in your projects. It currently includes a placeholder model named **PoolConv**. This model is composed of:
+This module (`blocks.py`) defines the architecture of the blocks you can use in your projects. It currently includes a placeholder model named **PoolConv**. This model is composed of:
 - An **optional max-pooling layer** with a kernel size of **m x m** (applied only when m > 1).
 - A convolutional layer with **c_out** filters of size **k x k**.
 
@@ -24,7 +24,7 @@ The **PoolConv** module applies the following operations sequentially:
 Below is an example of how to instantiate and use the **PoolConv** module:
 
 ```python
-from models import PoolConv
+from blocks import PoolConv
 import torch
 
 # Create a PoolConv model with pooling (m > 1)

@@ -18,7 +18,7 @@ epochs: 5
 lr: 0.001
 optimizer: "adam"        # Options: "adam", "sgd"
 
-# Model configuration (for PoolConv from models.py)
+# Model configuration (for PoolConv from blocks.py)
 # For MNIST, c_in should be 1; for CIFAR, use 3.
 c_in: 1
 m: 2                    # Pooling kernel size; if m == 1, pooling is skipped.
