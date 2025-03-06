@@ -47,7 +47,7 @@ class PoolConv(nn.Module):
             self.pool = nn.MaxPool2d(kernel_size=m)
 
         # Convolutional layer: input channels = c_in, output channels = n, kernel size = k x k
-        self.conv = nn.Conv2d(in_channels=c_in, out_channels=c_out, kernel_size=k)
+        self.conv = nn.Conv2d(in_channels=c_in, out_channels=c_out, kernel_size=k, padding=k // 2)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
