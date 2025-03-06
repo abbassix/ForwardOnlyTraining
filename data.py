@@ -113,7 +113,9 @@ def load_and_split_data(cfg: Config) -> tuple:
     set_seed(cfg.seed)
     
     # Initialize wandb logging
-    wandb.init(project=cfg.project, config=OmegaConf.to_container(cfg, resolve=True))
+    if wandb.run is None:
+        wandb.init(project=cfg.project, config=OmegaConf.to_container(cfg, resolve=True))
+
     
     download_flag = cfg.download
     if dataset_exists(cfg.dataset, cfg.root):
@@ -153,7 +155,6 @@ def load_and_split_data(cfg: Config) -> tuple:
     logger.info("Validation set size: %d", len(val_subset))
     logger.info("Test set size: %d", len(test_dataset))
     
-    wandb.finish()
     return train_loader, val_loader, test_loader
 
 # ------------------------------------------------------------------------------
