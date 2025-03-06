@@ -1,0 +1,26 @@
+# config.yaml
+
+# Data configuration (inherited from data.py's Config)
+seed: 42
+dataset: "mnist"         # Options: "mnist", "cifar10", "cifar100"
+val_ratio: 0.1
+root: "./data"
+download: true
+project: "train-block"   # wandb project name
+batch_size: 32
+num_workers: 4
+
+# Data generation configuration (inherited from data_gen.py's DataGenConfig)
+data_gen_type: "random_noise"
+
+# Training configuration (specific to train_block.py's TrainConfig)
+epochs: 5
+lr: 0.001
+optimizer: "adam"        # Options: "adam", "sgd"
+
+# Model configuration (for PoolConv from models.py)
+# For MNIST, c_in should be 1; for CIFAR, use 3.
+c_in: 1
+m: 2                    # Pooling kernel size; if m == 1, pooling is skipped.
+c_out: 3
+k: 3
