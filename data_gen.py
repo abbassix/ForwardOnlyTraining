@@ -35,8 +35,8 @@ def generate_data(batch: torch.Tensor, cfg: DataGenConfig) -> torch.Tensor:
     """
     if cfg.data_gen_type == "random_noise":
         noise = torch.randn_like(batch)
-        new_batch = torch.cat([batch, noise], dim=0)
-        return new_batch
+        augmented_batch = torch.cat([batch, noise], dim=0)
+        return augmented_batch
     else:
         raise ValueError(f"Unknown data generation type: {cfg.data_gen_type}")
 
