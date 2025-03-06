@@ -56,7 +56,7 @@ class TrainConfig(DataConfig):
 # ------------------------------------------------------------------------------
 # Training Function
 # ------------------------------------------------------------------------------
-@hydra.main(config_path=".", config_name="config")
+@hydra.main(config_name="config", config_path=".", version_base="1.1")
 def main(cfg: TrainConfig) -> None:
     logger.info("Training configuration:\n%s", OmegaConf.to_yaml(cfg))
     
@@ -65,7 +65,7 @@ def main(cfg: TrainConfig) -> None:
     logger.info("Using device: %s", device)
     
     # Initialize wandb logging
-    wandb.init(project=cfg.project, config=OmegaConf.to_container(cfg, resolve=True))
+    wandb.init(project=cfg.project, config=OmegaConf.to_container(cfg, resolve=True), reinit=True)
     
     # Adjust input channels based on dataset type
     if cfg.dataset.lower() == "mnist":
@@ -138,7 +138,7 @@ def main(cfg: TrainConfig) -> None:
         
         avg_loss = epoch_loss / batch_count if batch_count > 0 else float('inf')
         avg_accuracy = epoch_accuracy / batch_count if batch_count > 0 else 0.0
-        logger.info("Epoch [%d/%d] - Average Loss: %.4f", epoch, cfg.epochs, avg_loss)
+        logger.info("Epoch [%d/%d] - Average Loss: %.4f, Average FF Accuracy: %.4f", epoch, cfg.epochs, avg_loss, avg_accuracy)
         wandb.log({"epoch": epoch, "avg_loss": avg_loss, "avg_accuracy": avg_accuracy})
     
     wandb.finish()
