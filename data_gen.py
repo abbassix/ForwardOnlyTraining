@@ -40,7 +40,7 @@ def generate_data(batch: torch.Tensor, cfg: DataGenConfig) -> torch.Tensor:
     else:
         raise ValueError(f"Unknown data generation type: {cfg.data_gen_type}")
 
-@hydra.main(config_name="config", config_path=".")
+@hydra.main(config_name="config", config_path=".", version_base="1.1")
 def main(cfg: DataGenConfig) -> None:
     logger.info("Data Generation Config:\n%s", OmegaConf.to_yaml(cfg))
     
