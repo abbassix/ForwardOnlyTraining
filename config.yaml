@@ -11,10 +11,10 @@ batch_size: 32
 num_workers: 4
 
 # Data generation parameters
-data_gen_type: "random_noise"
+data_gen_type: "patch_shuffle"  # Options: "patch_shuffle", "random_noise"
 
 # Training hyperparameters
-epochs: 5
+epochs: 2
 lr: 0.001
 optimizer: "adam"        # Options: "adam", "sgd"
 
@@ -23,7 +23,9 @@ optimizer: "adam"        # Options: "adam", "sgd"
 model:
   - [1, 8, 3]
   - [2, 16, 3]
-  - [2, 32, 3]
+  - [2, 16, 3]
+  - [2, 16, 3]
+  - [2, 16, 3]
 
 # Default channel sizes (will be inferred from dataset if needed)
 c_in: 1  # 1 for MNIST, 3 for CIFAR datasets
