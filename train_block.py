@@ -76,9 +76,12 @@ def train_single_block(model, train_loader, cfg, block_index, device):
                 x = images
                 for prev_block in model.blocks[:block_index]:
                     x = prev_block(x)
+                    
+            # Kernel size for patch shuffle data generation
+            k = cfg.model[block_index][2] if cfg.data_gen_type == "patch_shuffle" else None
 
             # Augment data immediately before the current block
-            augmented_x = generate_data(x, cfg)
+            augmented_x = generate_data(x, cfg, k=k)
 
             # Forward pass through current block
             outputs = block(augmented_x)
