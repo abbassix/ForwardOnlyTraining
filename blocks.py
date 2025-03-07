@@ -15,6 +15,8 @@ The module returns a PyTorch model.
 import logging
 import torch
 import torch.nn as nn
+from typing import Optional
+from utils import layer_norm
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +47,10 @@ class PoolConv(nn.Module):
         self.use_pool = m > 1
         if self.use_pool:
             self.pool = nn.MaxPool2d(kernel_size=m)
-
+        
+        # Activation function for non-linearity
+        self.activation = nn.ReLU()
+        
         # Convolutional layer: input channels = c_in, output channels = n, kernel size = k x k
         self.conv = nn.Conv2d(in_channels=c_in, out_channels=c_out, kernel_size=k, padding=k // 2)
 
@@ -59,9 +64,12 @@ class PoolConv(nn.Module):
         Returns:
             torch.Tensor: Output tensor after applying optional max pooling and convolution.
         """
-        if self.use_pool:
-            x = self.pool(x)
+        with torch.no_grad():
+            if self.use_pool:
+                x = self.pool(x)
+                x = layer_norm(x)
         x = self.conv(x)
+        x = self.activation(x)
         return x
 
 
@@ -75,8 +83,9 @@ class GlobalAvgPoolClassifier(nn.Module):
         self.classifier = nn.Linear(c_in, num_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = self.pool(x)
-        x = x.view(x.size(0), -1)
+        with torch.no_grad():
+            x = self.pool(x)
+            x = x.view(x.size(0), -1)
         logits = self.classifier(x)
         return logits
 
