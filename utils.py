@@ -5,7 +5,7 @@ This file contains utility functions that are used in the implementation of the 
 """
 
 import torch
-import numpy as np
+
 
 def layer_norm(x: torch.Tensor) -> torch.Tensor:
     """
@@ -23,7 +23,7 @@ def layer_norm(x: torch.Tensor) -> torch.Tensor:
     
     # divide by the square root of the sum of squares
     sum_squares = torch.sum(x_flat ** 2, dim=1, keepdim=True) + 1e-5
-    x_flat = x_flat / np.sqrt(sum_squares)
+    x_flat = x_flat / torch.sqrt(sum_squares)
     
     # Reshape back to the original shape
     return x_flat.view_as(x)
