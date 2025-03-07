@@ -2,9 +2,9 @@
 
 # Data loading parameters
 seed: 42
-dataset: "mnist"         # Options: "mnist", "cifar10", "cifar100"
+dataset: "cifar100"         # Options: "mnist", "cifar10", "cifar100"
 val_ratio: 0.1
-root: "./data"
+root: "../datasets"
 download: true
 project: "train-block"
 batch_size: 32
@@ -18,14 +18,16 @@ epochs: 2
 lr: 0.001
 optimizer: "adam"        # Options: "adam", "sgd"
 
-num_classes: 10
+num_classes: 100
 
 # Model architecture (list of blocks)
 # Each block defined as: (pooling size m, number of filters n, kernel size k)
 model:
   - [1, 8, 3]
   - [2, 16, 3]
-  - [2, 16, 3]
+  - [2, 32, 3]
+  - [2, 64, 3]
+  - [2, 128, 3]
 
 # Default channel sizes (will be inferred from dataset if needed)
-c_in: 1  # 1 for MNIST, 3 for CIFAR datasets
+c_in: 3  # 1 for MNIST, 3 for CIFAR datasets
