@@ -18,14 +18,14 @@ epochs: 2
 lr: 0.001
 optimizer: "adam"        # Options: "adam", "sgd"
 
+num_classes: 10
+
 # Model architecture (list of blocks)
 # Each block defined as: (pooling size m, number of filters n, kernel size k)
 model:
   - [1, 8, 3]
   - [2, 16, 3]
-  - [2, 16, 3]
-  - [2, 16, 3]
-  - [2, 16, 3]
+  - [2, 32, 3]
 
 # Default channel sizes (will be inferred from dataset if needed)
 c_in: 1  # 1 for MNIST, 3 for CIFAR datasets
