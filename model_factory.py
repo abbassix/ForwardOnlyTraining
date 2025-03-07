@@ -27,12 +27,12 @@ from typing import Optional
 import hydra
 
 # Import the block from blocks.py (formerly models.py)
-from blocks import PoolConv
+from blocks import PoolConv, GlobalAvgPoolClassifier
 
 logger = logging.getLogger(__name__)
 
 class ModularModel(nn.Module):
-    def __init__(self, input_channels: int, block_configs: list):
+    def __init__(self, input_channels: int, block_configs: list, num_classes: int):
         """
         Constructs a modular model using blocks specified in block_configs.
 
@@ -47,13 +47,14 @@ class ModularModel(nn.Module):
         self.blocks = nn.ModuleList()
         
         current_channels = input_channels
-        for idx, block_cfg in enumerate(block_configs):
-            m, n, k = block_cfg  # Unpack block configuration
+        for idx, (m, n, k) in enumerate(block_configs):
             # Create a block with the current number of input channels.
             block = PoolConv(c_in=current_channels, m=m, c_out=n, k=k)
             self.blocks.append(block)
             logger.info(f"Added block {idx}: PoolConv(c_in={current_channels}, m={m}, c_out={n}, k={k})")
             current_channels = n  # Update input channels for the next block
+        # Add final classifier block explicitly
+        self.blocks.append(GlobalAvgPoolClassifier(current_channels, num_classes))
 
     def forward(self, x: torch.Tensor, layer_index: Optional[int] = None) -> torch.Tensor:
         """
@@ -70,9 +71,9 @@ class ModularModel(nn.Module):
         """
         if layer_index is not None:
             # Run preceding blocks with no gradient computation.
-            for i in range(layer_index):
-                with torch.no_grad():
-                    x = self.blocks[i](x)
+            with torch.no_grad():
+                for idx in range(layer_index):
+                    x = self.blocks[idx](x)
             # Run the specified block normally (allow gradients) and return its output.
             x = self.blocks[layer_index](x)
             return x
@@ -112,7 +113,7 @@ def build_model(cfg) -> ModularModel:
         )
     
     logger.info(f"Building ModularModel with input_channels={input_channels} and block_configs={block_configs}")
-    model = ModularModel(input_channels=input_channels, block_configs=block_configs)
+    model = ModularModel(input_channels=input_channels, block_configs=block_configs, num_classes=cfg.num_classes)
     
     # Validate model dimensions with a dummy input.
     dummy_input_size = (1, input_channels, 32, 32) if dataset != "mnist" else (1, input_channels, 28, 28)
