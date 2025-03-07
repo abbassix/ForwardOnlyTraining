@@ -79,7 +79,7 @@ def train_single_block(model, train_loader, cfg, block_index, device):
                 loss = criterion(outputs, labels)
 
                 # Compute accuracy
-                preds = outputs.argmax(dim=1)
+                pred_labels = outputs.argmax(dim=1)
                 accuracy = (pred_labels == labels).float().mean()
 
                 optimizer.zero_grad()
