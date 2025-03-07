@@ -64,6 +64,23 @@ class PoolConv(nn.Module):
         x = self.conv(x)
         return x
 
+
+class GlobalAvgPoolClassifier(nn.Module):
+    """
+    Adaptive average pooling followed by a linear classifier block.
+    """
+    def __init__(self, c_in: int, num_classes: int):
+        super().__init__()
+        self.pool = nn.AdaptiveAvgPool2d((1, 1))
+        self.classifier = nn.Linear(c_in, num_classes)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.pool(x)
+        x = x.view(x.size(0), -1)
+        logits = self.classifier(x)
+        return logits
+
+
 # For quick debugging/testing. In production, use a dedicated test suite (e.g., pytest).
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
